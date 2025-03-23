@@ -1,0 +1,10 @@
+Matrix_factorize/bounded-simplex-structured-matrix-factorization/
+Matrix_factorize/data_new/
+Matrix_factorize/mnist.npy
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+.DS_Store
+
