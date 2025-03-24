@@ -5,6 +5,11 @@ Matrix_factorize/mnist.npy
 *.log
 *.out
 *.toc
+*.xdv
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
 *.synctex.gz
 .DS_Store
 
