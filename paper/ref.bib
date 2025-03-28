@@ -64,6 +64,16 @@
   abstract = { Abstract.We propose a novel model for decomposing grayscale images into three distinct components: the structural part, representing sharp boundaries and regions with strong light-to-dark transitions; the smooth part, capturing soft shadows and shades; and the oscillatory part, characterizing textures and noise. To capture the homogeneous structures, we introduce a combination of \(L^0\)-gradient and curvature regularization on level lines. This new regularization term enforces strong sparsity on the image gradient while reducing the undesirable staircase effects as well as preserving the geometry of contours. For the smoothly varying component, we utilize the \(L^2\)-norm of the Laplacian that favors isotropic smoothness. To capture the oscillation, we use the inverse Sobolev seminorm. To solve the associated minimization problem, we design an efficient operator-splitting algorithm. Our algorithm effectively addresses the challenging nonconvex nonsmooth problem by separating it into subproblems. Each subproblem can be solved either directly using closed-form solutions or efficiently using the fast Fourier transform. We provide systematic experiments, including ablation and comparison studies, to analyze our model’s behaviors and demonstrate its effectiveness as well as efficiency. }
 }
 
+@misc{Lip,
+  title         = {An Inertial Block Majorization Minimization Framework for Nonsmooth Nonconvex Optimization},
+  author        = {Le Thi Khanh Hien and Duy Nhat Phan and Nicolas Gillis},
+  year          = {2022},
+  eprint        = {2010.12133},
+  archiveprefix = {arXiv},
+  primaryclass  = {math.OC},
+  url           = {https://arxiv.org/abs/2010.12133}
+}
+
 @article{MADestimate,
   author   = {Donoho, David L and Johnstone, Iain M},
   title    = {Ideal spatial adaptation by wavelet shrinkage},
@@ -80,7 +90,8 @@
   eprint   = {https://academic.oup.com/biomet/article-pdf/81/3/425/26079146/81.3.425.pdf}
 }
 
-@article{NMFAlgorithm,
+
+@article{NMF,
   author   = {Lee, Daniel D.
               and Seung, H. Sebastian},
   title    = {Learning the parts of objects by non-negative matrix factorization},
@@ -95,6 +106,18 @@
   issn     = {1476-4687},
   doi      = {10.1038/44565},
   url      = {https://doi.org/10.1038/44565}
+}
+
+@article{NMFIdentifiability,
+  author   = {Fu, Xiao and Huang, Kejun and Sidiropoulos, Nicholas D. and Ma, Wing-Kin},
+  journal  = {IEEE Signal Processing Magazine},
+  title    = {Nonnegative Matrix Factorization for Signal and Data Analytics: Identifiability, Algorithms, and Applications},
+  year     = {2019},
+  volume   = {36},
+  number   = {2},
+  pages    = {59-80},
+  keywords = {Hidden Markov models;Analytical models;Data models;Hyperspectral imaging},
+  doi      = {10.1109/MSP.2018.2877582}
 }
 
 @article{review2019,
@@ -128,6 +151,51 @@
   author   = {Bhawna Goyal and Ayush Dogra and Sunil Agrawal and B.S. Sohi and Apoorav Sharma},
   keywords = {Denoising, Spatial, Transform, Hybrid, Filters, PSNR},
   abstract = {At the crossing of the statistical and functional analysis, there exists a relentless quest for an efficient image denoising algorithm. In terms of greyscale imaging, a plethora of denoising algorithms have been documented in the literature, in spite of which the level of functionality of these algorithms still holds margin to acquire desired level of applicability. Quite often noise affecting the pixels in image is Gaussian in nature and uniformly deters information pixels in image. Based on some specific set of assumptions all methods work optimally, however they tend to create artefacts and remove fine structural details under general conditions. This article focuses on classifying and comparing some of the significant works in the field of denoising.}
+}
+
+@article{SMF,
+  title    = {Sparse matrix factorization with L2,1 norm for matrix completion},
+  journal  = {Pattern Recognition},
+  volume   = {127},
+  pages    = {108655},
+  year     = {2022},
+  issn     = {0031-3203},
+  doi      = {https://doi.org/10.1016/j.patcog.2022.108655},
+  url      = {https://www.sciencedirect.com/science/article/pii/S0031320322001364},
+  author   = {Xiaobo Jin and Jianyu Miao and Qiufeng Wang and Guanggang Geng and Kaizhu Huang},
+  keywords = {Matrix Completion, Matrix Factorization,  Norm Regularization, Alternative Optimization, Sparse Property},
+  abstract = {Matrix factorization is a popular matrix completion method, however, it is difficult to determine the ranks of the factor matrices. We propose two new sparse matrix factorization methods with l2,1 norm to explicitly force the row sparseness of the factor matrices, where the rank of the factor matrices is adaptively controlled by the regularization coefficient. We further theoretically prove the convergence property of our algorithms. The experimental results on the simulation and the benchmark datasets show that our methods achieve superior performance than its counterparts. Moreover our proposed methods can attain comparable performance with the deep learning-based matrix completion methods.}
+}
+
+@inproceedings{SSMF1,
+  author    = {Wu, Ruiyuan and Ma, Wing-Kin and Fu, Xiao},
+  booktitle = {2017 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  title     = {A stochastic maximum-likelihood framework for simplex structured matrix factorization},
+  year      = {2017},
+  volume    = {},
+  number    = {},
+  pages     = {2557-2561},
+  keywords  = {Maximum likelihood estimation;Stochastic processes;Probabilistic logic;Hyperspectral imaging;Data models;Structured matrix factorization;majorization minimization;sample average approximation;hyperspectral unmixing},
+  doi       = {10.1109/ICASSP.2017.7952618}
+}
+
+
+@article{SSMF2,
+  author   = {Abdolali, Maryam and Gillis, Nicolas},
+  title    = {Simplex-Structured Matrix Factorization: Sparsity-Based Identifiability and Provably Correct Algorithms},
+  journal  = {SIAM Journal on Mathematics of Data Science},
+  volume   = {3},
+  number   = {2},
+  pages    = {593-623},
+  year     = {2021},
+  doi      = {10.1137/20M1354982},
+  url      = { 
+              https://doi.org/10.1137/20M1354982
+              },
+  eprint   = { 
+              https://doi.org/10.1137/20M1354982
+              },
+  abstract = { In this paper, we provide novel algorithms with identifiability guarantees for simplex-structured matrix factorization (SSMF), a generalization of nonnegative matrix factorization. Current state-of-the-art algorithms that provide identifiability results for SSMF rely on the sufficiently scattered condition (SSC), which requires the data points to be well spread within the convex hull of the basis vectors. The conditions under which our proposed algorithms recover the unique decomposition are in most cases much weaker than the SSC. We only require having \$d\$ points on each facet of the convex hull of the basis vectors whose dimension is \$d-1\$. The key idea is based on extracting facets containing the largest number of points. We illustrate the effectiveness of our approach on synthetic data sets and hyperspectral images, showing that it outperforms state-of-the-art SSMF algorithms, as it is able to handle higher noise levels, rank deficient matrices, outliers, and input data that highly violates the SSC. }
 }
 
 @article{SVDWhiteNoise,
@@ -181,13 +249,13 @@
 
 @article{深度学习去噪,
   abstract = {Image denoising is a kind of technology that uses the context information of image sequence to remove noise and restore clear image. It is one of the important research contents in the field of computer vision. With the development of machine learning, deep learning has been widely used in the field of image denoising, and has become an effective solution for image denoising. Firstly, the deep learning image denoising method is analyzed. Secondly, the idea of image denoising method is analyzed in detail according to the network structure, and the advantages and disadvantages are summarized. Then, through the experimental results on DND, PolyU and other data sets, the performance of deep learning based image denoising methods is compared and analyzed. Finally, the key issues of image denoising research are summarized, and the future development trend of the research of this field is discussed. (English) [ABSTRACT FROM AUTHOR]},
-  author   = {刘迪 and 贾金露 and 赵玉卿 and 钱育蓉},
+  author   = {刘迪 {,} 贾金露 {,} 赵玉卿 {,} 钱育蓉},
   issn     = {10028331},
-  journal  = {Journal of Computer Engineering &amp; Applications},
+  journal  = {计算机工程与应用},
   keywords = {deep learning, image denoising, real noise, synthetic noise, 合成噪声, 图像去噪, 深度学习, 真实噪声, deep learning, image denoising, real noise, synthetic noise},
   number   = {7},
   pages    = {1 - 13},
-  title    = {基于深度学习的图像去噪方法研究综述. (Chinese).},
+  title    = {基于深度学习的图像去噪方法研究综述.},
   volume   = {57},
   url      = {https://search.ebscohost.com/login.aspx?direct=true&amp;db=edb&amp;AN=150058586&amp;site=eds-live},
   year     = {2021}

@@ -11,6 +11,7 @@
 \usepackage{float}
 \usepackage{cite}
 \usepackage{subcaption}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 
 % Page layout
 \geometry{a4paper, margin=1in}
@@ -28,7 +29,11 @@
 
 \end{abstract}
 
+\newpage
+
 \tableofcontents
+
+\newpage
 
 \section{绪论}
 随着信息时代的快速发展，数字图像处理技术在各个领域得到了广泛的应用。然而，由于图像采集设备的限制，图像中常常会受到各种形式的噪声干扰。图像降噪是图像处理中的一个重要问题，其目的是去除图像中的噪声，使图像更加清晰，便于后续的图像分析和处理。图像降噪技术在医学图像处理、卫星图像处理、安防监控等领域有着广泛的应用。
@@ -65,16 +70,132 @@
 \end{equation}
 其中$\mu$是均值，$\sigma$是标准差。由于大部分的白噪声均值为0，因此估计$\sigma$成为了图像降噪中的一个关键步骤，因为它直接影响降噪算法的性能。准确估计噪声水平可以帮助选择合适的降噪参数，从而在保留图像细节和去除噪声之间取得平衡。如果$\sigma$估计不准确，可能会导致过度平滑（损失细节）或降噪不足（残留噪声）\cite{Estimation_of_noise_variance}。为此，K. Rank等人\cite{MADestimate}使用绝对中位差（MAD）方法进行估计，Fabrizio Russo等人\cite{AWGN}在2003年提出了一种基于新型滤波器对标准差$\sigma$进行估计的方法。Liu等人在2013年提出了基于SVD的方法\cite{SVDWhiteNoise}进行估计。有了准确的噪声估计，我们就可以选择合适的降噪算法对图像进行降噪。
 
-\subsection{国内外降噪算法研究现状}
+\subsection{国内外图像降噪算法研究现状}
+随着人工智能的时代到来，图像降噪算法也经历了从传统方法到深度学习方法的转变。传统的图像降噪方法主要依赖于图像的先验知识和统计特性，而深度学习方法则通过大量的数据训练来自动学习图像的特征，从而实现更好的降噪效果。
+
 \subsubsection{基于传统滤波器的方法}
+传统的图像降噪方法主要包括均值滤波、中值滤波和高斯滤波等。这些方法通过对图像进行平滑处理来去除噪声，均值滤波是一种简单的线性滤波方法，通过对图像中每个像素点周围的像素值进行平均来平滑图像。中值滤波是一种非线性滤波方法，通过对图像中每个像素点周围的像素值进行排序，然后取中间值来平滑图像。高斯滤波是一种加权平均滤波方法，通过对图像中每个像素点周围的像素值进行加权平均来平滑图像。赵等人在2011年提出了一种能加速中值滤波算法计算的方法，使得中值滤波的效果更好以及计算更快\cite{中值滤波}。这些传统方法的底层逻辑十分简单，容易实现，但在处理复杂噪声时效果较差，且容易导致图像细节的损失，边缘模糊。
 \subsubsection{基于小波变换的方法}
+小波变换是一种时频分析方法，可以有效地提取图像的多尺度特征。基于小波变换的图像降噪方法通过对图像进行小波变换，将图像分解为不同频率的子带，然后对高频子带进行阈值处理，最后再进行小波逆变换来重构图像。徐等人在2022年提出了一种改进的小波软阈值函数\cite{小波变换}，使得小波变换的去噪效果明显提升，这种方法可以有效地去除高频噪声，同时保留低频信息。但是，小波变换方法在处理图像边缘和细节时可能会出现伪影现象，导致图像质量下降。同时阈值函数的超参数的确定也会影响图片降噪效果。
 \subsubsection{基于深度学习的方法}
+近年来，深度学习在图像处理领域取得了显著的进展。基于深度学习的图像降噪方法主要包括卷积神经网络（CNN）和生成对抗网络（GAN）等\cite{深度学习去噪},以及基于注意力机制的图像降噪方法\cite{注意力机制}。这些方法通过训练深度神经网络来学习图像的特征，从而实现图像降噪。与传统方法相比，基于深度学习的方法在处理复杂噪声和保留图像细节方面表现更好。但是，这些方法通常需要大量的训练数据和计算资源，且对网络结构和参数的选择较为敏感。目前为止，仍然没有理论上的证明来说明深度学习方法的收敛性和稳定性。
 
+\subsection{本文的研究内容}
+本文主要研究基于有界单纯形矩阵分解(Bounded Simplex Structured Matrix Factorization, BSSMF)矩阵分解的图像降噪方法。BSSMF算法是一种结合了非负矩阵分解（NMF）和结构化矩阵分解（SSMF）的矩阵分解算法。本文将BSSMF算法应用于图像降噪中，提出了一种新的图像降噪方法，并通过实验验证了其有效性。
+本文的主要贡献包括：
+\begin{itemize}
+    \item 提出了一种基于BSSMF矩阵分解的图像降噪方法，通过对图像进行矩阵分解来去除噪声。
+    \item 设计了一种新的BSSMF算法，通过引入特定的边界条件和概率单纯形约束来提高算法的性能。
+    \item 通过实验验证了所提出的方法在不同噪声水平下的有效性，并与传统方法进行了对比分析。
+\end{itemize}
+
+\newpage
 \section{相关工作}
+矩阵分解问题在数学上可以表示为：
+\begin{equation}
+    X \approx WH
+    \label{eq:matrix_decomposition}
+\end{equation}
+其中$X\in \mathbb{R}^{m \times n}$是原始矩阵，$W \in \mathbb{R}^{m \times r}$和$H \in \mathbb{R}^{r \times n}$是目标矩阵。矩阵分解要求$r\ll min(m, n)$\cite{NMFIdentifiability}，从而实现对原始矩阵的有效压缩和重构。后人们在此基础上加上了不同的约束条件，提出了多种矩阵分解算法，如非负矩阵分解（NMF）\cite{NMF}、稀疏矩阵分解（SMF）\cite{SMF}、结构化矩阵分解（SSMF）\cite{SSMF2}\cite{SSMF1}等。
+\subsection{BSSMF算法}
+BSSMF（Bounded Sparse and Structured Matrix Factorization）\cite{BSSMF}是一种矩阵分解算法，旨在从给定的矩阵中提取出潜在的结构化信息。BSSMF算法结合了NMF算法和SSMF算法，通过引入稀疏性约束和结构化约束来实现对矩阵的有效分解。该算法的主要思想是将\eqref{eq:matrix_decomposition}中的$W$和$H$矩阵进行约束，使得它们在分解过程中$W$满足边界条件\eqref{Bounded}，
 
-\section{实验设计}
+\begin{equation}
+    W(i,j) \in [a, b] \quad \forall i,j
+    \label{Bounded}
+\end{equation}
+而$H$矩阵满足单纯形约束\eqref{Simplex}：
+\begin{equation}
+    \Delta^r = \left\{ H \in \mathbb{R}^{r \times n} : H_{ij} \geq 0, \sum_{i=1}^{r} H_{ij} = 1, j=1,2,\ldots,n \right\}
+    \label{Simplex}
+\end{equation}
+
+BSSMF算法的目标是最小化以下目标函数：
+\begin{equation}
+    f = \min_{W,H} \frac{1}{2}\left\lVert X - WH \right\rVert_F^2 
+    \label{Loss}
+\end{equation}
+其中$\lambda_1$和$\lambda_2$是正则化参数，$\left\lVert \cdot \right\rVert_F$表示Frobenius范数，$\left\lVert \cdot \right\rVert_2$表示L2范数。BSSMF算法通过迭代优化$W$和$H$矩阵，使得目标函数达到最小值。
+
+迭代过程中，BSSMF算法使用了梯度下降法，分别对目标函数\eqref{Loss}的$W$和$H$进行求梯度，得到以下更新公式：
+\begin{equation}
+    \nabla f_W = -\left( X - WH \right)H^T
+    \label{Gradient_W}
+\end{equation}
+\begin{equation}
+    \nabla f_H = -W^T\left( X - WH \right)
+    \label{Gradient_H}
+\end{equation}
+BSSMF算法通过迭代更新$W$和$H$，使得目标函数逐渐收敛到最小值。
+
+
+以下是BSSMF算法\ref{algo}的计算过程：
+
+\begin{algorithm}[H]
+    \SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+    \SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+    \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+  
+    \Input{ matrix $X \in \mathbb{R}^{m \times n}$, bounds $a\leqslant b \in \mathbb{R}$, initial factors $W \in \mathbb{R}^{m \times r}$ s.t.
+    
+    $W(:,k)\in [a,b]$ for all $k$ and simplex structured $H \in \mathbb{R}^{r \times n}_{+}$ , weights $M \in [0, 1]^{m \times n}$}
+    \Output{$W$ and $H$}
+
+    { $\alpha_1 = 1$, $\alpha_2 = 1$, $W_{old} = W$, $H_{old} = H$, $L^{prev}_W = L_W = \left\lVert HH^T\right\rVert_2, L^{prev}_H = L_H = \left\lVert WW^T\right\rVert_2$ }
+
+    \Repeat{$some\ stopping\ criteria\ is\ satisfied$}{
+        \While{$stopping\ criteria\ not\ satisfied$}{$
+            \alpha_0 = \alpha_1 , \alpha_1 = (1+\sqrt{1+4\alpha_1^2})/2$
+
+            $\beta_W = min\left[ (\alpha_0 - 1)/\alpha_1, 0.9999\sqrt{L^{prev}_W/L_W} \right]$
+
+            $\overline{W} \leftarrow W + \beta_W (W - W_{old})$
+
+            $W_{old} \leftarrow W$
+            
+            $W \leftarrow \left[ \overline{W} + \frac{M \odot (X - \overline{W}H)H^T}{L_W} \right]^a_b$
+
+            $L^{prev}_W = L_W$
+            }
+        $L_H \leftarrow \left\lVert W^TW\right\rVert_2$
+        
+        \While{$stopping\ criteria\ not\ satisfied$}{$
+            \alpha_0 = \alpha_2 , \alpha_2 = (1+\sqrt{1+4\alpha_2^2})/2$
+
+            $\beta_H = min\left[ (\alpha_0 - 1)/\alpha_2, 0.9999\sqrt{L^{prev}_H/L_H} \right]$
+
+            $\overline{H} \leftarrow H + \beta_H (H - H_{old})$
+
+            $H_{old} \leftarrow H$
+            
+            $H \leftarrow \left[ \overline{H} + \frac{W^T(M \odot (X - W\overline{H}))}{L_H} \right]_{\Delta^r}$
+
+            $L^{prev}_H = L_H$
+            }
+        $L_W = \left\lVert H^TH\right\rVert_2$
+    }
+    
+    \caption{BSSMF算法}
+    \label{algo}
+    \small 注*：$L_W $和$L_H$分别表示$W$和$H$的L2范数，可以有效控制算法速度，且能在有部分数据为缺失的情况下进行收敛\cite{Lip}。
+    
+  \end{algorithm}\DecMargin{1em}
+
+\subsection{设定特定边界条件的BSSMF算法}
+\subsubsection{BSSMF的特征提取性质}
+\subsubsection{Z分位数}
+Z分位数是一种用于描述数据分布的统计量，表示在给定的分位数下，数据中有多少比例的值小于或等于该分位数。Z分位数可以用于评估数据的集中趋势和离散程度。Z分位数的计算可用以下公式表示：
+\begin{equation}
+    Z = \frac{X - \mu}{\sigma}
+\end{equation}
+其中$X$是数据值，$\mu$是均值，$\sigma$是标准差。Z分位数的值可以通过查找Z分位数表来获得。Z分位数表列出了不同分位数对应的Z值，可以用于快速查找和计算。
+
+\subsection{对概率单纯形的改进}
+
+\subsection{基于BSSMF的图像降噪算法}
 
 \section{实验结果与分析}
+\subsection{实验设计}
 
 \section{结论}
 
@@ -82,8 +203,39 @@
 \bibliography{ref}
 
 \appendix
-\section{Appendix}
-Include additional material, derivations, or data that support your paper but are not essential to the main text.
+\section*{\centering \Huge 附录}
 
+\section{正态分布的Z分位数表}
+\begin{table}[H]
+    \centering
+        \caption{\small 标准正态分布Z分位数表}
+        \label{tab:z_table_detailed}
+        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+            \hline
+            Z值 & 0.00 & 0.01 & 0.02 & 0.03 & 0.04 & 0.05 & 0.06 & 0.07 & 0.08 & 0.09 \\ \hline
+            0.0 & 0.5000 & 0.5040 & 0.5080 & 0.5120 & 0.5160 & 0.5199 & 0.5239 & 0.5279 & 0.5319 & 0.5359 \\ \hline
+            0.1 & 0.5398 & 0.5438 & 0.5478 & 0.5517 & 0.5557 & 0.5596 & 0.5636 & 0.5675 & 0.5714 & 0.5753 \\ \hline
+            0.2 & 0.5793 & 0.5832 & 0.5871 & 0.5910 & 0.5948 & 0.5987 & 0.6026 & 0.6064 & 0.6103 & 0.6141 \\ \hline
+            0.3 & 0.6179 & 0.6217 & 0.6255 & 0.6293 & 0.6331 & 0.6368 & 0.6406 & 0.6443 & 0.6480 & 0.6517 \\ \hline
+            0.4 & 0.6554 & 0.6591 & 0.6628 & 0.6664 & 0.6700 & 0.6736 & 0.6772 & 0.6808 & 0.6844 & 0.6879 \\ \hline
+            0.5 & 0.6915 & 0.6950 & 0.6985 & 0.7019 & 0.7054 & 0.7088 & 0.7123 & 0.7157 & 0.7190 & 0.7224 \\ \hline
+            0.6 & 0.7257 & 0.7291 & 0.7324 & 0.7357 & 0.7389 & 0.7422 & 0.7454 & 0.7486 & 0.7517 & 0.7549 \\ \hline
+            0.7 & 0.7580 & 0.7611 & 0.7642 & 0.7673 & 0.7704 & 0.7734 & 0.7764 & 0.7794 & 0.7823 & 0.7852 \\ \hline
+            0.8 & 0.7881 & 0.7910 & 0.7939 & 0.7967 & 0.7995 & 0.8023 & 0.8051 & 0.8078 & 0.8106 & 0.8133 \\ \hline
+            0.9 & 0.8159 & 0.8186 & 0.8212 & 0.8238 & 0.8264 & 0.8289 & 0.8315 & 0.8340 & 0.8365 & 0.8389 \\ \hline
+            1.0 & 0.8413 & 0.8438 & 0.8461 & 0.8485 & 0.8508 & 0.8531 & 0.8554 & 0.8577 & 0.8599 & 0.8621 \\ \hline
+            1.1 & 0.8643 & 0.8665 & 0.8686 & 0.8708 & 0.8729 & 0.8749 & 0.8770 & 0.8790 & 0.8810 & 0.8830 \\ \hline
+            1.2 & 0.8849 & 0.8869 & 0.8888 & 0.8907 & 0.8925 & 0.8944 & 0.8962 & 0.8980 & 0.8997 & 0.9015 \\ \hline
+            1.3 & 0.9032 & 0.9049 & 0.9066 & 0.9082 & 0.9099 & 0.9115 & 0.9131 & 0.9147 & 0.9162 & 0.9177 \\ \hline
+            1.4 & 0.9192 & 0.9207 & 0.9222 & 0.9236 & 0.9251 & 0.9265 & 0.9279 & 0.9292 & 0.9306 & 0.9319 \\ \hline
+            1.5 & 0.9332 & 0.9345 & 0.9357 & 0.9370 & 0.9382 & 0.9394 & 0.9406 & 0.9418 & 0.9429 & 0.9441 \\ \hline
+            1.6 & 0.9452 & 0.9463 & 0.9474 & 0.9484 & 0.9495 & 0.9505 & 0.9515 & 0.9525 & 0.9535 & 0.9545 \\ \hline
+            1.7 & 0.9554 & 0.9564 & 0.9573 & 0.9582 & 0.9591 & 0.9599 & 0.9608 & 0.9616 & 0.9625 & 0.9633 \\ \hline
+            1.8 & 0.9641 & 0.9649 & 0.9656 & 0.9664 & 0.9671 & 0.9678 & 0.9686 & 0.9693 & 0.9699 & 0.9706 \\ \hline
+            1.9 & 0.9713 & 0.9719 & 0.9726 & 0.9732 & 0.9738 & 0.9744 & 0.9750 & 0.9756 & 0.9761 & 0.9767 \\ \hline
+            2.0 & 0.9772 & 0.9778 & 0.9783 & 0.9788 & 0.9793 & 0.9798 & 0.9803 & 0.9808 & 0.9812 & 0.9817 \\ \hline
+        \end{tabular}
+        \caption*{\small 注：该表展示了标准正态分布的Z分位数，Z值表示标准正态分布曲线下的累积概率。}
+\end{table}
 
 \end{document}
