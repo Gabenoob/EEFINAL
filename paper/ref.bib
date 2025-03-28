@@ -36,6 +36,20 @@
   doi      = {10.1109/TSP.2023.3289704}
 }
 
+@article{Estimation_of_noise_variance,
+  author   = {K. Rank  and M. Lendl  and R. Unbehauen },
+  title    = {Estimation of image noise variance},
+  journal  = {IEE Proceedings - Vision, Image and Signal Processing},
+  volume   = {146},
+  issue    = {2},
+  pages    = {80-84},
+  year     = {1999},
+  doi      = {10.1049/ip-vis:19990238},
+  url      = {https://digital-library.theiet.org/doi/abs/10.1049/ip-vis%3A19990238},
+  eprint   = {https://digital-library.theiet.org/doi/pdf/10.1049/ip-vis%3A19990238},
+  abstract = { A novel algorithm for estimating the noise variance of an image is presented. The image is assumed to be corrupted by Gaussian distributed noise. The algorithm estimates the noise variance in three steps. At first the noisy image is filtered by a horizontal and a vertical difference operator to suppress the influence of the (unknown) original image. In a second step a histogram of local signal variances is computed. Finally a statistical evaluation of the histogram provides the desired estimation value. For a comparison with several previously published estimation methods an ensemble of 128 natural and artificial test images is used. It is shown that with the novel algorithm more accurate results can be achieved. }
+}
+
 @article{Euler,
   author   = {He, Roy Y. and Liu, Hao},
   title    = {Euler’s Elastica-Based Cartoon-Smooth-Texture Image Decomposition},
@@ -48,6 +62,22 @@
   url      = {https://doi.org/10.1137/24M167411X},
   eprint   = {https://doi.org/10.1137/24M167411X},
   abstract = { Abstract.We propose a novel model for decomposing grayscale images into three distinct components: the structural part, representing sharp boundaries and regions with strong light-to-dark transitions; the smooth part, capturing soft shadows and shades; and the oscillatory part, characterizing textures and noise. To capture the homogeneous structures, we introduce a combination of \(L^0\)-gradient and curvature regularization on level lines. This new regularization term enforces strong sparsity on the image gradient while reducing the undesirable staircase effects as well as preserving the geometry of contours. For the smoothly varying component, we utilize the \(L^2\)-norm of the Laplacian that favors isotropic smoothness. To capture the oscillation, we use the inverse Sobolev seminorm. To solve the associated minimization problem, we design an efficient operator-splitting algorithm. Our algorithm effectively addresses the challenging nonconvex nonsmooth problem by separating it into subproblems. Each subproblem can be solved either directly using closed-form solutions or efficiently using the fast Fourier transform. We provide systematic experiments, including ablation and comparison studies, to analyze our model’s behaviors and demonstrate its effectiveness as well as efficiency. }
+}
+
+@article{MADestimate,
+  author   = {Donoho, David L and Johnstone, Iain M},
+  title    = {Ideal spatial adaptation by wavelet shrinkage},
+  journal  = {Biometrika},
+  volume   = {81},
+  number   = {3},
+  pages    = {425-455},
+  year     = {1994},
+  month    = {09},
+  abstract = {With ideal spatial adaptation, an oracle furnishes information about how best to adapt a spatially variable estimator, whether piecewise constant, piecewise polynomial, variable knot spline, or variable bandwidth kernel, to the unknown function. Estimation with the aid of an oracle offers dramatic advantages over traditional linear estimation by nonadaptive kernels; however, it is a priori unclear whether such performance can be obtained by a procedure relying on the data alone. We describe a new principle for spatially-adaptive estimation: selective wavelet reconstruction. We show that variable-knot spline fits and piecewise-polynomial fits, when equipped with an oracle to select the knots, are not dramatically more powerful than selective wavelet reconstruction with an oracle. We develop a practical spatially adaptive method, Risk Shrink, which works by shrinkage of empirical wavelet coefficients. RiskShrink mimics the performance of an oracle for selective wavelet reconstruction as well as it is possible to do so. A new inequality in multivariate normal decision theory which we call the oracle inequality shows that attained performance differs from ideal performance by at most a factor of approximately 2 log n, where n is the sample size. Moreover no estimator can give a better guarantee than this. Within the class of spatially adaptive procedures, RiskShrink is essentially optimal. Relying only on the data, it comes within a factor log2n of the performance of piecewise polynomial and variableknot spline methods equipped with an oracle. In contrast, it is unknown how or if piecewise polynomial methods could be made to function this well when denied access to an oracle and forced to rely on data alone.},
+  issn     = {0006-3444},
+  doi      = {10.1093/biomet/81.3.425},
+  url      = {https://doi.org/10.1093/biomet/81.3.425},
+  eprint   = {https://academic.oup.com/biomet/article-pdf/81/3/425/26079146/81.3.425.pdf}
 }
 
 @article{NMFAlgorithm,
