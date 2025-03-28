@@ -1,30 +1,16 @@
-@article{10164188,
-  author   = {Thanh, Olivier Vu and Gillis, Nicolas and Lecron, Fabian},
-  journal  = {IEEE Transactions on Signal Processing},
-  title    = {Bounded Simplex-Structured Matrix Factorization: Algorithms, Identifiability and Applications},
-  year     = {2023},
-  volume   = {71},
-  number   = {},
-  pages    = {2434-2447},
-  keywords = {Matrix decomposition;Stochastic processes;Feature extraction;Principal component analysis;Upper bound;Signal processing algorithms;Tuning;Simplex-structured matrix factorization;nonnegative matrix factorization;identifiability;algorithms},
-  doi      = {10.1109/TSP.2023.3289704}
+@article{AWGN,
+  author   = {Russo, F.},
+  journal  = {IEEE Transactions on Instrumentation and Measurement},
+  title    = {A method for estimation and filtering of Gaussian noise in images},
+  year     = {2003},
+  volume   = {52},
+  number   = {4},
+  pages    = {1148-1154},
+  keywords = {Filtering;Gaussian noise;Noise cancellation;Smoothing methods;Image restoration;Nonlinear filters;Pixel;Image enhancement;Image processing},
+  doi      = {10.1109/TIM.2003.815989}
 }
 
-@article{15005858620210401,
-  abstract = {Image denoising is a kind of technology that uses the context information of image sequence to remove noise and restore clear image. It is one of the important research contents in the field of computer vision. With the development of machine learning, deep learning has been widely used in the field of image denoising, and has become an effective solution for image denoising. Firstly, the deep learning image denoising method is analyzed. Secondly, the idea of image denoising method is analyzed in detail according to the network structure, and the advantages and disadvantages are summarized. Then, through the experimental results on DND, PolyU and other data sets, the performance of deep learning based image denoising methods is compared and analyzed. Finally, the key issues of image denoising research are summarized, and the future development trend of the research of this field is discussed. (English) [ABSTRACT FROM AUTHOR]},
-  author   = {刘迪 and 贾金露 and 赵玉卿 and 钱育蓉},
-  issn     = {10028331},
-  journal  = {Journal of Computer Engineering &amp; Applications},
-  keywords = {deep learning, image denoising, real noise, synthetic noise, 合成噪声, 图像去噪, 深度学习, 真实噪声, deep learning, image denoising, real noise, synthetic noise},
-  number   = {7},
-  pages    = {1 - 13},
-  title    = {基于深度学习的图像去噪方法研究综述. (Chinese).},
-  volume   = {57},
-  url      = {https://search.ebscohost.com/login.aspx?direct=true&amp;db=edb&amp;AN=150058586&amp;site=eds-live},
-  year     = {2021}
-}
-
-@article{doi:10.1137/140990978,
+@article{Boosting,
   author   = {Romano, Yaniv and Elad, Michael},
   title    = {Boosting of Image Denoising Algorithms},
   journal  = {SIAM Journal on Imaging Sciences},
@@ -38,7 +24,19 @@
   abstract = { In this paper we propose a generic recursive algorithm for improving image denoising methods. Given the initial denoised image, we suggest repeating the following “SOS” procedure: (i) Strengthen the signal by adding the previous denoised image to the degraded input image, (ii) Operate the denoising method on the strengthened image, and (iii) Subtract the previous denoised image from the restored signal-strengthened outcome. The convergence of this process is studied for the K-SVD image denoising and related algorithms. Still in the context of K-SVD image denoising, we introduce an interesting interpretation of the SOS algorithm as a technique for closing the gap between the local patch-modeling and the global restoration task, thereby leading to improved performance. In a quest for the theoretical origin of the SOS algorithm, we provide a graph-based interpretation of our method, where the SOS recursive update effectively minimizes a penalty function that aims to denoise the image, while being regularized by the graph Laplacian. We demonstrate the SOS boosting algorithm for several leading denoising methods (K-SVD, NLM, BM3D, and EPLL), showing its tendency to further improve denoising performance. }
 }
 
-@article{doi:10.1137/24M167411X,
+@article{BSSMF,
+  author   = {Thanh, Olivier Vu and Gillis, Nicolas and Lecron, Fabian},
+  journal  = {IEEE Transactions on Signal Processing},
+  title    = {Bounded Simplex-Structured Matrix Factorization: Algorithms, Identifiability and Applications},
+  year     = {2023},
+  volume   = {71},
+  number   = {},
+  pages    = {2434-2447},
+  keywords = {Matrix decomposition;Stochastic processes;Feature extraction;Principal component analysis;Upper bound;Signal processing algorithms;Tuning;Simplex-structured matrix factorization;nonnegative matrix factorization;identifiability;algorithms},
+  doi      = {10.1109/TSP.2023.3289704}
+}
+
+@article{Euler,
   author   = {He, Roy Y. and Liu, Hao},
   title    = {Euler’s Elastica-Based Cartoon-Smooth-Texture Image Decomposition},
   journal  = {SIAM Journal on Imaging Sciences},
@@ -52,7 +50,24 @@
   abstract = { Abstract.We propose a novel model for decomposing grayscale images into three distinct components: the structural part, representing sharp boundaries and regions with strong light-to-dark transitions; the smooth part, capturing soft shadows and shades; and the oscillatory part, characterizing textures and noise. To capture the homogeneous structures, we introduce a combination of \(L^0\)-gradient and curvature regularization on level lines. This new regularization term enforces strong sparsity on the image gradient while reducing the undesirable staircase effects as well as preserving the geometry of contours. For the smoothly varying component, we utilize the \(L^2\)-norm of the Laplacian that favors isotropic smoothness. To capture the oscillation, we use the inverse Sobolev seminorm. To solve the associated minimization problem, we design an efficient operator-splitting algorithm. Our algorithm effectively addresses the challenging nonconvex nonsmooth problem by separating it into subproblems. Each subproblem can be solved either directly using closed-form solutions or efficiently using the fast Fourier transform. We provide systematic experiments, including ablation and comparison studies, to analyze our model’s behaviors and demonstrate its effectiveness as well as efficiency. }
 }
 
-@article{Fan2019,
+@article{NMFAlgorithm,
+  author   = {Lee, Daniel D.
+              and Seung, H. Sebastian},
+  title    = {Learning the parts of objects by non-negative matrix factorization},
+  journal  = {Nature},
+  year     = {1999},
+  month    = {Oct},
+  day      = {01},
+  volume   = {401},
+  number   = {6755},
+  pages    = {788-791},
+  abstract = {Is perception of the whole based on perception of its parts? There is psychological1 and physiological2,3 evidence for parts-based representations in the brain, and certain computational theories of object recognition rely on such representations4,5. But little is known about how brains or computers might learn the parts of objects. Here we demonstrate an algorithm for non-negative matrix factorization that is able to learn parts of faces and semantic features of text. This is in contrast to other methods, such as principal components analysis and vector quantization, that learn holistic, not parts-based, representations. Non-negative matrix factorization is distinguished from the other methods by its use of non-negativity constraints. These constraints lead to a parts-based representation because they allow only additive, not subtractive, combinations. When non-negative matrix factorization is implemented as a neural network, parts-based representations emerge by virtue of two properties: the firing rates of neurons are never negative and synaptic strengths do not change sign.},
+  issn     = {1476-4687},
+  doi      = {10.1038/44565},
+  url      = {https://doi.org/10.1038/44565}
+}
+
+@article{review2019,
   author   = {Fan, Linwei
               and Zhang, Fan
               and Fan, Hui
@@ -71,7 +86,7 @@
   url      = {https://doi.org/10.1186/s42492-019-0016-7}
 }
 
-@article{GOYAL2020220,
+@article{review2020,
   title    = {Image denoising review: From classical to state-of-the-art approaches},
   journal  = {Information Fusion},
   volume   = {55},
@@ -83,6 +98,18 @@
   author   = {Bhawna Goyal and Ayush Dogra and Sunil Agrawal and B.S. Sohi and Apoorav Sharma},
   keywords = {Denoising, Spatial, Transform, Hybrid, Filters, PSNR},
   abstract = {At the crossing of the statistical and functional analysis, there exists a relentless quest for an efficient image denoising algorithm. In terms of greyscale imaging, a plethora of denoising algorithms have been documented in the literature, in spite of which the level of functionality of these algorithms still holds margin to acquire desired level of applicability. Quite often noise affecting the pixels in image is Gaussian in nature and uniformly deters information pixels in image. Based on some specific set of assumptions all methods work optimally, however they tend to create artefacts and remove fine structural details under general conditions. This article focuses on classifying and comparing some of the significant works in the field of denoising.}
+}
+
+@article{SVDWhiteNoise,
+  author   = {Liu, Wei and Lin, Weisi},
+  journal  = {IEEE Transactions on Image Processing},
+  title    = {Additive White Gaussian Noise Level Estimation in SVD Domain for Images},
+  year     = {2013},
+  volume   = {22},
+  number   = {3},
+  pages    = {872-883},
+  keywords = {Estimation;Noise level;AWGN;Standards;Low pass filters;Tin;Additive white Gaussian noise;noise estimation;singular value decomposition (SVD)},
+  doi      = {10.1109/TIP.2012.2219544}
 }
 
 @article{中值滤波,
@@ -98,7 +125,7 @@
   url       = http://yygx.xml-journal.net/article/id/9777
 }
 
-@article{徐景秀:92,
+@article{小波变换,
   author    = {徐景秀{,}张青},
   title     = {改进小波软阈值函数在图像去噪中的研究应用},
   publisher = {计算机工程与科学},
@@ -112,7 +139,7 @@
   url       = http://joces.nudt.edu.cn/CN/abstract/article_17286.shtml
 }
 
-@article{王权2025一种注意力机制引导的双卷积神经网络图像去噪算法,
+@article{注意力机制,
   title     = {一种注意力机制引导的双卷积神经网络图像去噪算法},
   author    = {王权},
   journal   = {Computer Science and Application},
@@ -120,4 +147,18 @@
   pages     = {159},
   year      = {2025},
   publisher = {中文学术期刊, 汉斯出版社, Hans Publishers}
+}
+
+@article{深度学习去噪,
+  abstract = {Image denoising is a kind of technology that uses the context information of image sequence to remove noise and restore clear image. It is one of the important research contents in the field of computer vision. With the development of machine learning, deep learning has been widely used in the field of image denoising, and has become an effective solution for image denoising. Firstly, the deep learning image denoising method is analyzed. Secondly, the idea of image denoising method is analyzed in detail according to the network structure, and the advantages and disadvantages are summarized. Then, through the experimental results on DND, PolyU and other data sets, the performance of deep learning based image denoising methods is compared and analyzed. Finally, the key issues of image denoising research are summarized, and the future development trend of the research of this field is discussed. (English) [ABSTRACT FROM AUTHOR]},
+  author   = {刘迪 and 贾金露 and 赵玉卿 and 钱育蓉},
+  issn     = {10028331},
+  journal  = {Journal of Computer Engineering &amp; Applications},
+  keywords = {deep learning, image denoising, real noise, synthetic noise, 合成噪声, 图像去噪, 深度学习, 真实噪声, deep learning, image denoising, real noise, synthetic noise},
+  number   = {7},
+  pages    = {1 - 13},
+  title    = {基于深度学习的图像去噪方法研究综述. (Chinese).},
+  volume   = {57},
+  url      = {https://search.ebscohost.com/login.aspx?direct=true&amp;db=edb&amp;AN=150058586&amp;site=eds-live},
+  year     = {2021}
 }

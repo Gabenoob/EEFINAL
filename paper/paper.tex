@@ -15,8 +15,8 @@
 \geometry{a4paper, margin=1in}
 
 % Title and Author
-\title{Final Paper Title}
-\author{Your Name}
+\title{基于BSSMF矩阵分解的图像降噪方法}
+\author{王伟钊}
 \date{\today}
 
 \begin{document}
@@ -24,32 +24,40 @@
 \maketitle
 
 \begin{abstract}
-This is the abstract of your paper. Provide a brief summary of the content, objectives, and conclusions of your work.
+
 \end{abstract}
 
-\section{Introduction}
-Introduce the topic of your paper. Provide background information and state the objectives of your work.
+\tableofcontents
 
-\section{Related Work}
-Discuss previous research or work related to your topic. Cite relevant sources, such as \cite{GOYAL2020220}.
+\section{绪论}
+图像降噪是图像处理中的一个重要问题，它在图像处理、计算机视觉、模式识别等领域有着广泛的应用。图像降噪的目的是去除图像中的噪声，使图像更加清晰，便于后续的处理。图像降噪的方法有很多，包括基于小波变换的方法、基于局部统计特性的方法、基于矩阵分解的方法等。本文提出了一种基于BSSMF矩阵分解的图像降噪方法，该方法利用了图像的低秩性和稀疏性，通过分解图像矩阵为低秩矩阵和稀疏矩阵的和，实现了对图像的降噪。
 
-\section{Methodology}
-Explain the methods or approaches used in your work. Provide enough detail for reproducibility.\cite{Fan2019}
+\subsection{问题描述}
+在数学上，图像降噪问题可以用如下数学表达式描述\cite{SVDWhiteNoise}：
+\begin{equation}
+    A(i,j)=A_{0}(i,j)+N(i,j)
+\end{equation}
+其中$A(i,j)$是观测到的图像，$A_{0}(i,j)$是原始图像，$N(i,j)$是高斯白噪声(Addctive White Gaussian Noise, AWGN)\cite{AWGN}。
 
-\section{Results}
-Present the results of your work. Use tables, figures, and equations as needed.\cite{中值滤波}
+\subsection{国内外研究现状}
+\subsubsection{基于传统滤波器的方法}
+\subsubsection{基于小波变换的方法}
+\subsubsection{基于深度学习的方法}
 
-\section{Discussion}
-Interpret the results and discuss their implications. Compare with related work if applicable.
+\section{相关工作}
 
-\section{Conclusion}
-Summarize the main findings of your paper and suggest future work.
+\section{实验设计}
+
+\section{实验结果与分析}
+
+\section{结论}
+
+\bibliographystyle{plain}
+\bibliography{ref}
 
 \appendix
 \section{Appendix}
 Include additional material, derivations, or data that support your paper but are not essential to the main text.
 
-\bibliographystyle{plain}
-\bibliography{ref}
 
 \end{document}
