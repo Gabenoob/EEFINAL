@@ -94,12 +94,14 @@
 \newpage
 
 \section{相关工作}
+
 矩阵分解问题在数学上可以表示为：
 \begin{equation}
     X \approx WH
     \label{eq:matrix_decomposition}
 \end{equation}
 其中$X\in \mathbb{R}^{m \times n}$是原始矩阵，$W \in \mathbb{R}^{m \times r}$和$H \in \mathbb{R}^{r \times n}$是目标矩阵。矩阵分解要求$r\ll min(m, n)$\cite{NMFIdentifiability}，从而实现对原始矩阵的有效压缩和重构。后人们在此基础上加上了不同的约束条件，提出了多种矩阵分解算法，如非负矩阵分解（NMF）\cite{NMF}、稀疏矩阵分解（SMF）\cite{SMF}、结构化矩阵分解（SSMF）\cite{SSMF2}\cite{SSMF1}等。
+
 \subsection{BSSMF算法}
 BSSMF（Bounded Sparse and Structured Matrix Factorization）\cite{BSSMF}是一种矩阵分解算法，旨在从给定的矩阵中提取出潜在的结构化信息。BSSMF算法结合了NMF算法和SSMF算法，通过引入稀疏性约束和结构化约束来实现对矩阵的有效分解。该算法的主要思想是将\eqref{eq:matrix_decomposition}中的$W$和$H$矩阵进行约束，使得它们在分解过程中$W$满足边界条件\eqref{Bounded}，
 
@@ -189,6 +191,7 @@ BSSMF算法通过迭代更新$W$和$H$，使得目标函数逐渐收敛到最小
 在原始的BSSMF算法中，可以用$n$张具有相同特征的图片转为$n$个一维向量，每张图片像素点的个数即为$m$，然后将n个向量拼接为$m\times n$的输入矩阵$X$，算法运行后输入矩阵$X$的列可以近似表示为$W$矩阵中列的线性组合，即：
 \begin{equation}
     X(:,j) \approx \sum_{i=1}^{r} W(:,i)H(i,j)
+    \label{eq:linear_combination}
 \end{equation}
 由于$H$矩阵满足单纯形约束，因此$H(i,j)$的值在$[0,1]$之间且加和为1，这更直观地说明了$X$的组成成分。在算法中对$W$进行[0,255]的约束，可以使分解后的$W$直接对应一张图片，更直观的解释了算法的可解释性。因此BSSMF算法通过对输入矩阵进行分解，可以提取出潜在的特征信息，从而实现对数据的降维和特征选择。图\ref{fig:BSSMF1}展示了BSSMF算法和NMF算法在MNIST数据集上的分解结果。可以看出，BSSMF算法能够更清晰地提取出数字间共同的特征，而NMF算法则存在一定的模糊性。图\ref{fig:BSSMF2}展示了数字8的BSSMF分解结果，以及最后的组合方式。可以看出，BSSMF算法能够有效地提取出数字8的特征信息，并且通过对特征进行组合，可以重构出原始图像\cite{BSSMF}。
 \begin{figure}[H]
@@ -221,7 +224,7 @@ BSSMF算法通过迭代更新$W$和$H$，使得目标函数逐渐收敛到最小
 \subsection{设定特定边界条件的BSSMF算法}
 
 有了对BSSMF算法的初步了解后，我们可以对其进行改进。BSSMF算法的一个缺点是分解后的$W$矩阵所有的列向量都在$[a,b]$的范围内，这使得分解后的$W$矩阵的每一列都具有相同的边界条件，这在某些情况下可能不符合实际需求。例如，在图像降噪中，我们更希望分解后的$W$矩阵在前几列或第一列保留图像的最关键信息，而后面的列则只包含噪声信息$N$。为了解决这个问题，我们可以对BSSMF算法进行改进，设定特定的边界条件，使得分解后的$W$矩阵的每一列都具有不同的边界条件。我们可以将$W$矩阵的前$r_1$列设定为$[a_1,b_1]$，后$r_2$列设定为$[a_2,b_2]$，其中$r_1+r_2=r$。这样，我们就可以在分解后的$W$矩阵中保留图像的最关键信息，同时去除噪声信息。如下图\ref{fig:matrix_decomposition}所示，假设$W$矩阵的$W_{i1}$设定为$[0,255]$，$W_{i2}$和$W_{i3}$设定为$[0,30]$。这样，我们在分解后的$W$矩阵中便能将图像的最关键信息保存在第1列，而噪声等其他信息保存在第2第3列。
-\begin{figure}[H]
+\begin{figure}
     \centering
     \begin{equation*}
         \begin{bmatrix}
@@ -256,26 +259,102 @@ Z分位数是一种用于描述数据分布的统计量，可以用于评估数�
     Z = \frac{X - \mu}{\sigma}
     \label{eq:Z}
 \end{equation}
-其中$X$是数据值，$\mu$是均值，$\sigma$是标准差。Z分位数所对应的概率值可以通过查找Z分位数表\ref{tab:z_table_detailed}计算获得。其内容为：在标准正态分布下($\mu = 0 , \sigma = 1 $)，随机变量$X$在$P(X \leq z)$的概率。该表列出了不同分位数对应的Z值，可以用于快速查找和计算。
+其中$X$是数据值，$\mu$是均值，$\sigma$是标准差。Z分位数所对应的概率值可以通过查找Z分位数表\ref{tab:z_table_detailed}计算获得。其内容为：在标准正态分布下($\mu = 0 , \sigma = 1 $)，随机变量$X$在$P(X \leq z)$的概率。该表列出了不同分位数对应的Z值，可以用于快速查找和计算。但在计算的过程中需要注意的是，Z分位数表中列出的概率值是单侧的,如图\ref{fig:norm1}。而我们需要的是双侧的概率值$P(X \leq z) + P(X \geq z)$，如图\ref{fig:norm2}。因此，在查找Z分位数表时，需要将所需的概率值重新计算。
 
-普通加性高斯白噪声的均值为$\mu$，标准差为$\sigma$，我们可以通过查找Z分位数表\ref{tab:z_table_detailed}来确定噪声的幅值范围。假设我们希望分解能够包含95\%的噪声，我们可以查找Z分位数表中对应于97.5\%的Z值为1.96。根据公式\ref{eq:Z}，我们可以计算出噪声幅值范围为：
-\begin{equation}
+\begin{figure}[H]
+    \centering
+    % 子图 (a)
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/norm_distribution1.png}
+        \caption{97.5\%的置信度}
+        \label{fig:norm1}
+    \end{subfigure}
+    \hfill
+    % 子图 (b)
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/norm_distribution2.png}
+        \caption{95\%的置信度}
+        \label{fig:norm2}
+    \end{subfigure}
+    \caption{标准正态分布}
+\end{figure}
+
+
+普通加性高斯白噪声的均值为$\mu$，标准差为$\sigma$，我们可以通过查找Z分位数表\ref{tab:z_table_detailed}来确定噪声的幅值范围。假设我们希望分解能够包含95\%的噪声，我们可以查找Z分位数表中对应于97.5\%的Z值为1.96。那么Z在$[-1.96,1.96]$的概率对应为95\%。根据公式\ref{eq:Z}，我们可以计算出噪声幅值范围为：
+\begin{equation*}
     X \in [\mu - 1.96\sigma, \mu + 1.96\sigma] = [\mu -1.96\sigma,\mu + 1.96\sigma]
-\end{equation}
+\end{equation*}
 因此，我们可以将$W$矩阵的后几列的边界条件设定为$[\mu -1.96\sigma,\mu + 1.96\sigma]$。
 
-举一个例子，我们有一个高斯白噪声的图像，其均值为10，标准差为20。我们可以通过查找Z分位数表来确定噪声的幅值范围。我们希望分解能够包含99\%的噪声，我们可以查找Z分位数表中对应于99\%的Z值为2.576。根据公式\ref{eq:Z}，我们可以计算出噪声幅值范围为：
-\begin{equation}
+举一个例子，我们有一个高斯白噪声的图像，其均值为10，标准差为20。我们可以通过查找Z分位数表来确定噪声的幅值范围。我们希望分解能够包含99\%的噪声，我们可以查找Z分位数表中对应于99.5\%的Z值为2.576。根据公式\ref{eq:Z}，我们可以计算出噪声幅值范围为：
+\begin{equation*}
     X \in [10 - 2.576 \times 20, 10 + 2.576 \times 20] = [-41.52, 61.52]
-\end{equation}
+\end{equation*}
 因此，我们可以将$W$矩阵的后几列的边界条件设定为$[-41.52, 61.52]$。这样，我们就可以在分解后的$W$矩阵中保留图像的最关键信息，同时分离噪声信息。
 
 \subsection{对概率单纯形的改进}
+在原BSSMF算法中，输入矩阵$X$的列向量是随机打乱后输入的，这是由于打乱后的数据更能验证算法的鲁棒性。但若将BSSMF算法应用于图像降噪中，输入列向量所对应的标签可以作为一个重要的已知信息，合理运用这一信息可以提升算法的降噪效果。
 
+由式\ref{eq:linear_combination}，$H$的第$j$列直接对应于输入矩阵$X$的第$j$列。若已知$X$矩阵中第一列和第二列肯定包含图片信息，我们可以将$H$的第$j$列的第$i$行设定为1，若不包含则设为0。这样，我们就可以通过对$H$的第1行进行约束来确定原始图像中的主要成分。
+
+现在举一个简单的例子。如图\ref{fig:improve_simplex}所示，假设我们有一个包含两张图片以及两张噪声图片的输入矩阵$X$，其中第一列和第二列分别对应于两张图片与噪声的加和。我们可以将$H$的第1行设定为[1,1,0,0]，表示第一列和第二列包含图像信息，而第三第四张图片不含图片信息。这样，再分解的最后，我们在$W$矩阵中的第一列一定对应着我们图片的主要组成信息，而第2第3列则对应的噪声信息。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/add_Simplex.png}
+    \caption{对概率单纯形的改进}
+    \label{fig:improve_simplex}
+\end{figure}
+
+我们也可以通过设定$H$其他行列的值来实现对分解结果的约束。如第1第3行为0，第2行为1，这就约束了$W$的第二列为对应原始图像的主要组成信息。
 
 \subsection{基于BSSMF的图像降噪算法}
+下面基于上述对BSSMF算法的改进，提出一种新的基于BSSMF的图像降噪算法。首先为确保矩阵分解能够识别到图像中的重要信息，输入的图像应至少包含两张不同的含有图像细节以及随机的高斯噪声的图像。同时我们还需要至少一张空白的只含有高斯噪声的图像。将输入的图像通过reshape函数处理为一维向量后，拼接为一个$m \times n$的矩阵$X$，其中$m$为每张图片像素点的个数，$n$为图像数量。选择合适的$r < min(m,n)$，$W$矩阵的第1列设定为$[0,255]$，后$r-1$列设定为$[\mu - 1.96\sigma,\mu + 1.96\sigma]$。然后将输入矩阵$X$输入到BSSMF算法中进行分解，在每一次迭代后，手动调整$H$第一行的值为1或0，直至完成计算。最后将分解后的$W$矩阵的第一列reshape为图片的格式，得到降噪后的图像。下面给出改进的BSSMF算法\ref{algo_new}：
+
+\begin{algorithm}[H]
+    \SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+    \SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+    \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+  
+    \Input{ matrix $X \in \mathbb{R}^{m \times n}$, bounds $a\leqslant b \in \mathbb{R}$, initial factors $W \in \mathbb{R}^{m \times r}$, image number $k<r$, noise parameter $\mu$ and $\sigma$, s.t.
+    
+    $W(:,k)\in [a,b]$ for all $k$ and simplex structured $H \in \mathbb{R}^{r \times n}_{+}$}
+    \Output{$W$ and $H$}
+
+    { $\alpha_1 = 1$, $\alpha_2 = 1$, $W_{old} = W$, $H_{old} = H$, $L^{prev}_W = L_W = \left\lVert HH^T\right\rVert_2, L^{prev}_H = L_H = \left\lVert WW^T\right\rVert_2$ }
+
+    \Repeat{$some\ stopping\ criteria\ is\ satisfied$}{
+        \While{$stopping\ criteria\ not\ satisfied$}{$
+            \overline{W} = BSSMF\_update\_W(W, H, X, L_H)$
+
+            $W(:,1:k) \leftarrow \left[ \overline{W(:,1:k)} \right]^a_b$
+
+            $W(:,k+1:r) = \left[ \overline{W(:,k+1:r)} \right]^{\mu - 1.96\sigma}_{\mu + 1.96\sigma}$
+
+
+            }
+        $L_H \leftarrow \left\lVert W^TW\right\rVert_2$
+        
+        \While{$stopping\ criteria\ not\ satisfied$}{
+            $H = BSSMF\_update\_H(H, W, X, L_W)$
+
+            $H \leftarrow \left[ H \right]_{\Delta^r}$
+
+            $H(1,j) \leftarrow 1$ \textbf{if} $j \leq k$ \textbf{else} 0
+
+            }
+        $L_W = \left\lVert H^TH\right\rVert_2$
+    }
+    
+    \caption{改进的BSSMF降噪算法}
+    \label{algo_new}
+    
+  \end{algorithm}\DecMargin{1em}
 
 \newpage
+
 \section{实验结果与分析}
 \subsection{实验设计}
 
