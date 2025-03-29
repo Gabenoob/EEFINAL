@@ -75,8 +75,10 @@
 
 \subsubsection{基于传统滤波器的方法}
 传统的图像降噪方法主要包括均值滤波、中值滤波和高斯滤波等。这些方法通过对图像进行平滑处理来去除噪声，均值滤波是一种简单的线性滤波方法，通过对图像中每个像素点周围的像素值进行平均来平滑图像。中值滤波是一种非线性滤波方法，通过对图像中每个像素点周围的像素值进行排序，然后取中间值来平滑图像。高斯滤波是一种加权平均滤波方法，通过对图像中每个像素点周围的像素值进行加权平均来平滑图像。赵等人在2011年提出了一种能加速中值滤波算法计算的方法，使得中值滤波的效果更好以及计算更快\cite{中值滤波}。这些传统方法的底层逻辑十分简单，容易实现，但在处理复杂噪声时效果较差，且容易导致图像细节的损失，边缘模糊。
+
 \subsubsection{基于小波变换的方法}
 小波变换是一种时频分析方法，可以有效地提取图像的多尺度特征。基于小波变换的图像降噪方法通过对图像进行小波变换，将图像分解为不同频率的子带，然后对高频子带进行阈值处理，最后再进行小波逆变换来重构图像。徐等人在2022年提出了一种改进的小波软阈值函数\cite{小波变换}，使得小波变换的去噪效果明显提升，这种方法可以有效地去除高频噪声，同时保留低频信息。但是，小波变换方法在处理图像边缘和细节时可能会出现伪影现象，导致图像质量下降。同时阈值函数的超参数的确定也会影响图片降噪效果。
+
 \subsubsection{基于深度学习的方法}
 近年来，深度学习在图像处理领域取得了显著的进展。基于深度学习的图像降噪方法主要包括卷积神经网络（CNN）和生成对抗网络（GAN）等\cite{深度学习去噪},以及基于注意力机制的图像降噪方法\cite{注意力机制}。这些方法通过训练深度神经网络来学习图像的特征，从而实现图像降噪。与传统方法相比，基于深度学习的方法在处理复杂噪声和保留图像细节方面表现更好。但是，这些方法通常需要大量的训练数据和计算资源，且对网络结构和参数的选择较为敏感。目前为止，仍然没有理论上的证明来说明深度学习方法的收敛性和稳定性。
 
@@ -90,6 +92,7 @@
 \end{itemize}
 
 \newpage
+
 \section{相关工作}
 矩阵分解问题在数学上可以表示为：
 \begin{equation}
@@ -118,10 +121,12 @@ BSSMF算法的目标是最小化以下目标函数：
 其中$\lambda_1$和$\lambda_2$是正则化参数，$\left\lVert \cdot \right\rVert_F$表示Frobenius范数，$\left\lVert \cdot \right\rVert_2$表示L2范数。BSSMF算法通过迭代优化$W$和$H$矩阵，使得目标函数达到最小值。
 
 迭代过程中，BSSMF算法使用了梯度下降法，分别对目标函数\eqref{Loss}的$W$和$H$进行求梯度，得到以下更新公式：
+
 \begin{equation}
     \nabla f_W = -\left( X - WH \right)H^T
     \label{Gradient_W}
 \end{equation}
+
 \begin{equation}
     \nabla f_H = -W^T\left( X - WH \right)
     \label{Gradient_H}
@@ -181,22 +186,100 @@ BSSMF算法通过迭代更新$W$和$H$，使得目标函数逐渐收敛到最小
     
   \end{algorithm}\DecMargin{1em}
 
+在原始的BSSMF算法中，可以用$n$张具有相同特征的图片转为$n$个一维向量，每张图片像素点的个数即为$m$，然后将n个向量拼接为$m\times n$的输入矩阵$X$，算法运行后输入矩阵$X$的列可以近似表示为$W$矩阵中列的线性组合，即：
+\begin{equation}
+    X(:,j) \approx \sum_{i=1}^{r} W(:,i)H(i,j)
+\end{equation}
+由于$H$矩阵满足单纯形约束，因此$H(i,j)$的值在$[0,1]$之间且加和为1，这更直观地说明了$X$的组成成分。在算法中对$W$进行[0,255]的约束，可以使分解后的$W$直接对应一张图片，更直观的解释了算法的可解释性。因此BSSMF算法通过对输入矩阵进行分解，可以提取出潜在的特征信息，从而实现对数据的降维和特征选择。图\ref{fig:BSSMF1}展示了BSSMF算法和NMF算法在MNIST数据集上的分解结果。可以看出，BSSMF算法能够更清晰地提取出数字间共同的特征，而NMF算法则存在一定的模糊性。图\ref{fig:BSSMF2}展示了数字8的BSSMF分解结果，以及最后的组合方式。可以看出，BSSMF算法能够有效地提取出数字8的特征信息，并且通过对特征进行组合，可以重构出原始图像\cite{BSSMF}。
+\begin{figure}[H]
+    \centering
+    % 子图 (a)
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/BSSMF_MNIST.png}
+        \caption{BSSMF}
+    \end{subfigure}
+    \hfill
+    % 子图 (b)
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/NMF_MNIST.png}
+        \caption{NMF}
+    \end{subfigure}
+    \caption{BSSMF和NMF基于500张数字图像分解到$r=10$的对比}
+    \caption*{\raggedright \small 注*:每一张图片代表$W$矩阵中的一列经过reshape函数处理后的结果}
+    \label{fig:BSSMF1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/deconposition.png}
+    \caption{数字8的BSSMF分解}
+    \label{fig:BSSMF2}
+\end{figure}
+
 \subsection{设定特定边界条件的BSSMF算法}
-\subsubsection{BSSMF的特征提取性质}
-\subsubsection{Z分位数}
-Z分位数是一种用于描述数据分布的统计量，表示在给定的分位数下，数据中有多少比例的值小于或等于该分位数。Z分位数可以用于评估数据的集中趋势和离散程度。Z分位数的计算可用以下公式表示：
+
+有了对BSSMF算法的初步了解后，我们可以对其进行改进。BSSMF算法的一个缺点是分解后的$W$矩阵所有的列向量都在$[a,b]$的范围内，这使得分解后的$W$矩阵的每一列都具有相同的边界条件，这在某些情况下可能不符合实际需求。例如，在图像降噪中，我们更希望分解后的$W$矩阵在前几列或第一列保留图像的最关键信息，而后面的列则只包含噪声信息$N$。为了解决这个问题，我们可以对BSSMF算法进行改进，设定特定的边界条件，使得分解后的$W$矩阵的每一列都具有不同的边界条件。我们可以将$W$矩阵的前$r_1$列设定为$[a_1,b_1]$，后$r_2$列设定为$[a_2,b_2]$，其中$r_1+r_2=r$。这样，我们就可以在分解后的$W$矩阵中保留图像的最关键信息，同时去除噪声信息。如下图\ref{fig:matrix_decomposition}所示，假设$W$矩阵的$W_{i1}$设定为$[0,255]$，$W_{i2}$和$W_{i3}$设定为$[0,30]$。这样，我们在分解后的$W$矩阵中便能将图像的最关键信息保存在第1列，而噪声等其他信息保存在第2第3列。
+\begin{figure}[H]
+    \centering
+    \begin{equation*}
+        \begin{bmatrix}
+            x_{11} & x_{12} & x_{13} & x_{14} \\
+            x_{21} & x_{22} & x_{23} & x_{24} \\
+            x_{31} & x_{32} & x_{33} & x_{34} \\
+            x_{41} & x_{42} & x_{43} & x_{44} \\
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            w_{11} & w_{12} & w_{13}\\
+            w_{21} & w_{22} & w_{23} \\
+            w_{31} & w_{32} & w_{33} \\
+            w_{41} & w_{42} & w_{43}
+
+        \end{bmatrix}
+        \cdot
+        \begin{bmatrix}
+            h_{11} & h_{12} & h_{13} & h_{14} \\
+            h_{21} & h_{22} & h_{23} & h_{24} \\
+            h_{31} & h_{32} & h_{33} & h_{34} \\
+        \end{bmatrix}
+    \end{equation*}
+    \caption{矩阵分解}
+    \label{fig:matrix_decomposition}
+\end{figure}
+
+除去对分解矩阵$W$第一列的约束为$[0,255]$外，我们应如何确定其他列的边界条件呢？基于高斯白噪声的概率学特性，可以找到绝大部分的噪声幅值所存在的范围。我们可以通过噪声的Z分位数来确定其他列的边界条件。
+
+Z分位数是一种用于描述数据分布的统计量，可以用于评估数据的集中趋势和离散程度。Z分位数的计算可用以下公式\ref{eq:Z}表示：
 \begin{equation}
     Z = \frac{X - \mu}{\sigma}
+    \label{eq:Z}
 \end{equation}
-其中$X$是数据值，$\mu$是均值，$\sigma$是标准差。Z分位数的值可以通过查找Z分位数表来获得。Z分位数表列出了不同分位数对应的Z值，可以用于快速查找和计算。
+其中$X$是数据值，$\mu$是均值，$\sigma$是标准差。Z分位数所对应的概率值可以通过查找Z分位数表\ref{tab:z_table_detailed}计算获得。其内容为：在标准正态分布下($\mu = 0 , \sigma = 1 $)，随机变量$X$在$P(X \leq z)$的概率。该表列出了不同分位数对应的Z值，可以用于快速查找和计算。
+
+普通加性高斯白噪声的均值为$\mu$，标准差为$\sigma$，我们可以通过查找Z分位数表\ref{tab:z_table_detailed}来确定噪声的幅值范围。假设我们希望分解能够包含95\%的噪声，我们可以查找Z分位数表中对应于97.5\%的Z值为1.96。根据公式\ref{eq:Z}，我们可以计算出噪声幅值范围为：
+\begin{equation}
+    X \in [\mu - 1.96\sigma, \mu + 1.96\sigma] = [\mu -1.96\sigma,\mu + 1.96\sigma]
+\end{equation}
+因此，我们可以将$W$矩阵的后几列的边界条件设定为$[\mu -1.96\sigma,\mu + 1.96\sigma]$。
+
+举一个例子，我们有一个高斯白噪声的图像，其均值为10，标准差为20。我们可以通过查找Z分位数表来确定噪声的幅值范围。我们希望分解能够包含99\%的噪声，我们可以查找Z分位数表中对应于99\%的Z值为2.576。根据公式\ref{eq:Z}，我们可以计算出噪声幅值范围为：
+\begin{equation}
+    X \in [10 - 2.576 \times 20, 10 + 2.576 \times 20] = [-41.52, 61.52]
+\end{equation}
+因此，我们可以将$W$矩阵的后几列的边界条件设定为$[-41.52, 61.52]$。这样，我们就可以在分解后的$W$矩阵中保留图像的最关键信息，同时分离噪声信息。
 
 \subsection{对概率单纯形的改进}
 
+
 \subsection{基于BSSMF的图像降噪算法}
 
+\newpage
 \section{实验结果与分析}
 \subsection{实验设计}
 
+\newpage
 \section{结论}
 
 \bibliographystyle{plain}
@@ -205,7 +288,7 @@ Z分位数是一种用于描述数据分布的统计量，表示在给定的分�
 \appendix
 \section*{\centering \Huge 附录}
 
-\section{正态分布的Z分位数表}
+\section{标准正态分布的Z分位数表}
 \begin{table}[H]
     \centering
         \caption{\small 标准正态分布Z分位数表}
@@ -235,7 +318,7 @@ Z分位数是一种用于描述数据分布的统计量，表示在给定的分�
             1.9 & 0.9713 & 0.9719 & 0.9726 & 0.9732 & 0.9738 & 0.9744 & 0.9750 & 0.9756 & 0.9761 & 0.9767 \\ \hline
             2.0 & 0.9772 & 0.9778 & 0.9783 & 0.9788 & 0.9793 & 0.9798 & 0.9803 & 0.9808 & 0.9812 & 0.9817 \\ \hline
         \end{tabular}
-        \caption*{\small 注：该表展示了标准正态分布的Z分位数，Z值表示标准正态分布曲线下的累积概率。}
+        \caption*{\raggedright \small 注：该表展示了标准正态分布的Z分位数，Z值表示标准正态分布曲线下的累积概率。}
 \end{table}
 
 \end{document}
